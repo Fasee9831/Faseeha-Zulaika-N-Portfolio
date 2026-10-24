@@ -158,7 +158,7 @@
 
 
 
-    <link rel="stylesheet" href="style.css?v=43.0">
+    <link rel="stylesheet" href="style.css?v=44.0">
 
     <style id="mobile-critical-fixes">
 
@@ -2108,6 +2108,14 @@
 
         @media (max-width: 768px) {
             .portfolio-chatbot {
+                position: fixed !important;
+                bottom: max(1.15rem, env(safe-area-inset-bottom, 1.15rem)) !important;
+                right: max(1.15rem, env(safe-area-inset-right, 1.15rem)) !important;
+                z-index: 9999 !important;
+                display: block !important;
+                pointer-events: auto !important;
+            }
+            .portfolio-chatbot.chat-open {
                 position: static !important;
             }
             .portfolio-chatbot-panel[hidden] {
@@ -20032,7 +20040,7 @@
 
 
 
-    <script src="script.js?v=14.0"></script>
+    <script src="script.js?v=15.0"></script>
 
 
 
