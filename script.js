@@ -68,14 +68,23 @@ function initPreloader() {
         }).join('');
     }
 
+    const isMobile = window.innerWidth <= 768 || 'ontouchstart' in window;
     const previousBodyOverflow = document.body.style.overflow;
     const keepPageAtTop = () => {
         if (!preloader.classList.contains('loaded')) window.scrollTo(0, 0);
     };
 
-    document.body.style.overflow = 'hidden';
-    window.scrollTo(0, 0);
-    window.addEventListener('scroll', keepPageAtTop, { passive: true });
+    if (!isMobile) {
+        document.body.style.overflow = 'hidden';
+        window.scrollTo(0, 0);
+        window.addEventListener('scroll', keepPageAtTop, { passive: true });
+    } else {
+        // Fast-forward or dismiss immediately on touch on mobile
+        preloader.addEventListener('touchstart', () => {
+            markReady();
+            enterPortfolio();
+        }, { passive: true });
+    }
 
     const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     let progress = 0;
@@ -84,8 +93,8 @@ function initPreloader() {
     let ready = false;
 
     function renderProgress() {
-        progress += (targetProgress - progress) * (reducedMotion ? .35 : .08);
-        if (Math.abs(targetProgress - progress) < .1) progress = targetProgress;
+        progress += (targetProgress - progress) * (isMobile ? .5 : (reducedMotion ? .35 : .08));
+        if (Math.abs(targetProgress - progress) < .5) progress = targetProgress;
         fillEl.style.width = `${progress}%`;
         if (percentEl) percentEl.textContent = Math.round(progress);
 
@@ -107,12 +116,14 @@ function initPreloader() {
         if (ready) return;
         ready = true;
         progress = targetProgress = 100;
-        setTimeout(enterPortfolio, reducedMotion ? 120 : 320);
+        setTimeout(enterPortfolio, isMobile ? 50 : (reducedMotion ? 120 : 320));
     }
 
     function enterPortfolio() {
-        if (!ready || preloader.classList.contains('loaded')) return;
+        ready = true;
+        if (preloader.classList.contains('loaded')) return;
         preloader.classList.add('loaded');
+        preloader.style.pointerEvents = 'none';
         window.removeEventListener('scroll', keepPageAtTop);
         document.body.style.overflow = '';
         document.documentElement.style.overflow = '';
@@ -208,7 +219,7 @@ function initPreloader() {
             if (window.ScrollTrigger) {
                 ScrollTrigger.refresh();
             }
-        }, reducedMotion ? 80 : 1250);
+        }, isMobile ? 100 : (reducedMotion ? 80 : 1250));
     }
 
     preloader.addEventListener('pointermove', event => {
@@ -218,7 +229,10 @@ function initPreloader() {
 
     window.addEventListener('keydown', event => { if ((event.key === 'Enter' || event.key === ' ') && ready) { event.preventDefault(); enterPortfolio(); } }, { passive: false });
     window.addEventListener('wheel', event => { if (!preloader.classList.contains('loaded')) { event.preventDefault(); targetProgress = Math.min(100, targetProgress + 3); } }, { passive: false });
-    const loadingInterval = setInterval(() => { targetProgress = Math.min(100, targetProgress + (reducedMotion ? 10 : 5.2)); if (targetProgress >= 100) clearInterval(loadingInterval); }, reducedMotion ? 80 : 100);
+    const loadingInterval = setInterval(() => {
+        targetProgress = Math.min(100, targetProgress + (isMobile ? 35 : reducedMotion ? 10 : 5.2));
+        if (targetProgress >= 100) clearInterval(loadingInterval);
+    }, isMobile ? 40 : (reducedMotion ? 80 : 100));
     progressFrame = requestAnimationFrame(renderProgress);
 
     // Fail-safe release timer to guarantee page is 100% unlocked on all mobile devices
@@ -229,7 +243,7 @@ function initPreloader() {
         window.removeEventListener('scroll', keepPageAtTop);
         document.body.style.overflow = '';
         document.documentElement.style.overflow = '';
-    }, 2200);
+    }, isMobile ? 350 : 2200);
 }
 
 /* ----------------------------------------------------
@@ -1761,145 +1775,48 @@ function initProjectSearchFilter() {
 
     }
 
-    // 3D Perspective Card Tilt (Desktop Mouse + Mobile Touch + Gyroscope)
-    projectCards.forEach(card => {
-        let isTouching = false;
+    // 3D Perspective Card Tilt (Desktop Mouse Hover - Mobile Touch 100% Native 120Hz Scroll)
+    const isTouchDevice = 'ontouchstart' in window || (navigator.maxTouchPoints && navigator.maxTouchPoints > 0) || window.innerWidth <= 1024;
+    if (!isTouchDevice) {
+        projectCards.forEach(card => {
+            function applyTilt(clientX, clientY) {
+                const rect = card.getBoundingClientRect();
+                if (rect.width === 0 || rect.height === 0) return;
+                const x = clientX - rect.left;
+                const y = clientY - rect.top;
+                const centerX = rect.width / 2;
+                const centerY = rect.height / 2;
 
-        function applyTilt(clientX, clientY) {
-            const rect = card.getBoundingClientRect();
-            if (rect.width === 0 || rect.height === 0) return;
-            const x = clientX - rect.left;
-            const y = clientY - rect.top;
-            const centerX = rect.width / 2;
-            const centerY = rect.height / 2;
+                const maxTilt = 18;
+                let rotateX = (centerY - y) / 12;
+                let rotateY = (x - centerX) / 12;
+                rotateX = Math.max(-maxTilt, Math.min(maxTilt, rotateX));
+                rotateY = Math.max(-maxTilt, Math.min(maxTilt, rotateY));
 
-            const maxTilt = 18;
-            let rotateX = (centerY - y) / 12;
-            let rotateY = (x - centerX) / 12;
-            rotateX = Math.max(-maxTilt, Math.min(maxTilt, rotateX));
-            rotateY = Math.max(-maxTilt, Math.min(maxTilt, rotateY));
+                card.classList.add('is-tilted');
+                card.style.transition = 'none';
+                card.style.transform = `perspective(1000px) rotateX(${rotateX.toFixed(2)}deg) rotateY(${rotateY.toFixed(2)}deg) translateY(-8px)`;
+            }
 
-            card.classList.add('is-tilted');
-            card.style.transition = 'none';
-            card.style.transform = `perspective(1000px) rotateX(${rotateX.toFixed(2)}deg) rotateY(${rotateY.toFixed(2)}deg) translateY(-8px)`;
-        }
-
-        function resetTilt() {
-            card.classList.remove('is-tilted');
-            card.style.transition = 'transform 0.4s cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 0.4s ease, border-color 0.4s ease';
-            card.style.transform = 'perspective(1000px) rotateX(0deg) rotateY(0deg) translateY(0px)';
-            setTimeout(() => {
-                if (!card.classList.contains('is-tilted')) {
-                    card.style.transition = '';
-                }
-            }, 400);
-        }
-
-        // Desktop Mouse Listeners
-        card.addEventListener('mousemove', (e) => {
-            applyTilt(e.clientX, e.clientY);
-        });
-
-        card.addEventListener('mouseleave', () => {
-            resetTilt();
-        });
-
-        // Mobile Touch Listeners - Smooth Scroll Priority (Zero layout thrashing on swipe)
-        let touchStartX = 0;
-        let touchStartY = 0;
-        let isTouchScrolling = false;
-
-        card.addEventListener('touchstart', (e) => {
-            if (e.touches && e.touches.length === 1) {
-                touchStartX = e.touches[0].clientX;
-                touchStartY = e.touches[0].clientY;
-                isTouchScrolling = false;
-                isTouching = true;
-                requestAnimationFrame(() => {
-                    if (isTouching && !isTouchScrolling) {
-                        applyTilt(touchStartX, touchStartY);
+            function resetTilt() {
+                card.classList.remove('is-tilted');
+                card.style.transition = 'transform 0.4s cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 0.4s ease, border-color 0.4s ease';
+                card.style.transform = 'perspective(1000px) rotateX(0deg) rotateY(0deg) translateY(0px)';
+                setTimeout(() => {
+                    if (!card.classList.contains('is-tilted')) {
+                        card.style.transition = '';
                     }
-                });
+                }, 400);
             }
-        }, { passive: true });
 
-        card.addEventListener('touchmove', (e) => {
-            if (!isTouching || !e.touches || e.touches.length !== 1) return;
-            const touch = e.touches[0];
-            const dy = Math.abs(touch.clientY - touchStartY);
-            const dx = Math.abs(touch.clientX - touchStartX);
-            // If vertical movement detected, user is scrolling the page: cancel tilt immediately
-            if (dy > 6 || dx > 10 || isTouchScrolling) {
-                if (!isTouchScrolling) {
-                    isTouchScrolling = true;
-                    resetTilt();
-                }
-                return;
-            }
-            applyTilt(touch.clientX, touch.clientY);
-        }, { passive: true });
-
-        card.addEventListener('touchend', () => {
-            if (isTouching) {
-                isTouching = false;
-                isTouchScrolling = false;
-                resetTilt();
-            }
-        }, { passive: true });
-
-        card.addEventListener('touchcancel', () => {
-            if (isTouching) {
-                isTouching = false;
-                isTouchScrolling = false;
-                resetTilt();
-            }
-        }, { passive: true });
-    });
-
-    // Mobile Device Orientation (Gyroscope) Tilt (Zero Layout Thrashing via IntersectionObserver)
-    if (window.DeviceOrientationEvent && ('ontouchstart' in window || navigator.maxTouchPoints > 0)) {
-        const activeCards = new Set();
-        if ('IntersectionObserver' in window) {
-            const tiltObserver = new IntersectionObserver((entries) => {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting) {
-                        activeCards.add(entry.target);
-                    } else {
-                        activeCards.delete(entry.target);
-                        if (!entry.target.classList.contains('is-tilted')) {
-                            entry.target.style.transform = '';
-                        }
-                    }
-                });
-            }, { threshold: 0.15 });
-            projectCards.forEach(card => tiltObserver.observe(card));
-        }
-
-        let gyroRaf = null;
-        let isTouchInteracting = false;
-        window.addEventListener('touchstart', () => { isTouchInteracting = true; }, { passive: true });
-        window.addEventListener('touchend', () => { setTimeout(() => { isTouchInteracting = false; }, 200); }, { passive: true });
-        window.addEventListener('touchcancel', () => { isTouchInteracting = false; }, { passive: true });
-
-        window.addEventListener('deviceorientation', (e) => {
-            if (isTouchInteracting || e.gamma === null || e.beta === null || activeCards.size === 0) return;
-            const gamma = Math.max(-20, Math.min(20, e.gamma));
-            const restingPitch = 45;
-            const beta = Math.max(-25, Math.min(25, e.beta - restingPitch));
-
-            if (gyroRaf) cancelAnimationFrame(gyroRaf);
-            gyroRaf = requestAnimationFrame(() => {
-                const rotY = (gamma / 20) * 8;
-                const rotX = (-beta / 25) * 8;
-                activeCards.forEach(card => {
-                    if (card.classList.contains('is-tilted') && card.style.transition === 'none') {
-                        return; // Active touch or mouse takes priority
-                    }
-                    card.style.transition = 'transform 0.15s ease-out';
-                    card.style.transform = `perspective(1000px) rotateX(${rotX.toFixed(2)}deg) rotateY(${rotY.toFixed(2)}deg) translateY(-4px)`;
-                });
+            card.addEventListener('mousemove', (e) => {
+                applyTilt(e.clientX, e.clientY);
             });
-        }, { passive: true });
+
+            card.addEventListener('mouseleave', () => {
+                resetTilt();
+            });
+        });
     }
 
 }
@@ -2784,17 +2701,9 @@ function initInteractiveTechField() {
         });
     });
 
-    // Mobile gyroscope tilt
+    // Mobile gyroscope tilt (Disabled to preserve silky 120Hz native scrolling and 0% background battery drain)
     let tiltX = 0;
     let tiltY = 0;
-    if (window.DeviceOrientationEvent && 'ontouchstart' in window) {
-        window.addEventListener('deviceorientation', (e) => {
-            if (e.gamma !== null && e.beta !== null) {
-                tiltX = Math.max(-15, Math.min(15, e.gamma)) * 0.7;
-                tiltY = Math.max(-15, Math.min(15, e.beta - 45)) * 0.7;
-            }
-        }, { passive: true });
-    }
 
     // High-performance RAF animation loop with IntersectionObserver
     let physicsRaf = null;

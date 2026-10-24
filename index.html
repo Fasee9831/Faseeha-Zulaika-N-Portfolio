@@ -165,7 +165,7 @@
 
 
 
-    <link rel="stylesheet" href="style.css?v=50.0">
+    <link rel="stylesheet" href="style.css?v=51.0">
 
     <style id="mobile-critical-fixes">
 
@@ -181,12 +181,20 @@
             html {
                 width: 100% !important;
                 max-width: 100% !important;
+                scroll-behavior: auto !important;
+                overflow-x: clip !important;
+                overflow-y: auto !important;
+                overscroll-behavior: auto !important;
+                -webkit-overflow-scrolling: touch !important;
             }
             body {
                 width: 100% !important;
                 max-width: 100% !important;
-                overflow-x: hidden !important;
+                overflow-x: clip !important;
+                overflow-y: visible !important;
+                overscroll-behavior: auto !important;
                 -webkit-overflow-scrolling: touch !important;
+                position: relative !important;
             }
 
             /* GPU Layer Promotion & Ultra-Smooth Mobile Rasterization (Zero Multi-Pass Blur Lag) */
@@ -2097,10 +2105,20 @@
            MOBILE PERFORMANCE & SMOOTHNESS ACCELERATION
            ============================================================ */
         @media (max-width: 768px) {
-            html, body {
+            html {
                 scroll-behavior: auto !important;
+                overflow-x: clip !important;
+                overflow-y: auto !important;
+                overscroll-behavior: auto !important;
                 -webkit-overflow-scrolling: touch !important;
-                overscroll-behavior-y: none;
+            }
+            body {
+                scroll-behavior: auto !important;
+                overflow-x: clip !important;
+                overflow-y: visible !important;
+                overscroll-behavior: auto !important;
+                -webkit-overflow-scrolling: touch !important;
+                position: relative !important;
             }
             #cursor-glow, #cursor-dot {
                 display: none !important;
@@ -19998,7 +20016,7 @@
 
 
 
-    <script src="script.js?v=20.0"></script>
+    <script src="script.js?v=21.0"></script>
 
 
 
