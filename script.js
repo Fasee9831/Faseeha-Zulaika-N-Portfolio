@@ -650,217 +650,143 @@ function initCareerObjectiveTyping() {
    ---------------------------------------------------- */
 
 function initScrollReveals() {
-
+    const isMobileDevice = window.innerWidth <= 1024 || 'ontouchstart' in window || (navigator.maxTouchPoints && navigator.maxTouchPoints > 0);
     const items = document.querySelectorAll('.reveal-item:not(#hero *), .reveal-left, .reveal-right, .reveal-up, .journey-reveal-item');
-
     if (!items.length) return;
 
     // Fallback: reveal everything if IO is unsupported
-
     if (!('IntersectionObserver' in window)) {
-
         items.forEach(el => el.classList.add('active', 'is-visible', 'settled'));
-
         return;
-
     }
 
     const settleTimers = new Map();
-
     const observer = new IntersectionObserver((entries) => {
-
         entries.forEach(entry => {
-
             const el = entry.target;
-
             if (entry.isIntersecting) {
-
                 // Replay entrance whenever reached
-
                 el.classList.add('active', 'is-visible');
-
                 // Start organic floating animation once the reveal transition completes
-
                 const timer = setTimeout(() => {
-
                     el.classList.add('settled');
-
                     settleTimers.delete(el);
-
                 }, 850);
-
                 settleTimers.set(el, timer);
-
-            } else {
-
-                // Reset state when scrolling away so animation repeats on re-entry
-
-                el.classList.remove('active', 'is-visible', 'settled');
-
-                const timer = settleTimers.get(el);
-
-                if (timer) {
-
-                    clearTimeout(timer);
-
-                    settleTimers.delete(el);
-
+                if (isMobileDevice) {
+                    observer.unobserve(el);
                 }
-
+            } else {
+                if (!isMobileDevice) {
+                    // Reset state when scrolling away so animation repeats on re-entry (desktop only)
+                    el.classList.remove('active', 'is-visible', 'settled');
+                    const timer = settleTimers.get(el);
+                    if (timer) {
+                        clearTimeout(timer);
+                        settleTimers.delete(el);
+                    }
+                }
             }
-
         });
-
-    }, { threshold: 0.12 });
+    }, { threshold: isMobileDevice ? 0.08 : 0.12 });
 
     items.forEach(el => {
-
-        el.style.willChange = 'transform, opacity';
-
+        if (!isMobileDevice) {
+            el.style.willChange = 'transform, opacity';
+        }
         observer.observe(el);
-
     });
 
     // Contact cards replay their directional entrance whenever the section returns.
-
     const contactReplayItems = document.querySelectorAll('.contact-replay');
-
     if (contactReplayItems.length && 'IntersectionObserver' in window) {
-
         const contactReplayObserver = new IntersectionObserver((entries) => {
-
             entries.forEach(entry => {
-
                 entry.target.classList.toggle('active', entry.isIntersecting);
-
                 entry.target.classList.toggle('is-visible', entry.isIntersecting);
-
+                if (isMobileDevice && entry.isIntersecting) {
+                    contactReplayObserver.unobserve(entry.target);
+                }
             });
-
         }, { threshold: 0.25 });
-
         contactReplayItems.forEach(el => contactReplayObserver.observe(el));
-
     }
 
     // Slide-from-left observer (re-triggers on every scroll in/out)
-
     const slideItems = document.querySelectorAll('.slide-from-left, .slide-stat');
-
     if (slideItems.length && 'IntersectionObserver' in window) {
-
         const settleTimers = new Map();
-
         const slideObserver = new IntersectionObserver((entries) => {
-
             entries.forEach(entry => {
-
                 if (entry.isIntersecting) {
-
                     entry.target.classList.add('appear');
-
                     const settleTimer = setTimeout(() => {
-
                         entry.target.classList.add('settled');
-
                         settleTimers.delete(entry.target);
-
                     }, 850);
-
                     settleTimers.set(entry.target, settleTimer);
-
-                } else {
-
-                    entry.target.classList.remove('appear');
-
-                    entry.target.classList.remove('settled');
-
-                    const settleTimer = settleTimers.get(entry.target);
-
-                    if (settleTimer) {
-
-                        clearTimeout(settleTimer);
-
-                        settleTimers.delete(entry.target);
-
+                    if (isMobileDevice) {
+                        slideObserver.unobserve(entry.target);
                     }
-
+                } else {
+                    if (!isMobileDevice) {
+                        entry.target.classList.remove('appear');
+                        entry.target.classList.remove('settled');
+                        const settleTimer = settleTimers.get(entry.target);
+                        if (settleTimer) {
+                            clearTimeout(settleTimer);
+                            settleTimers.delete(entry.target);
+                        }
+                    }
                 }
-
             });
-
         }, { threshold: 0.15 });
-
         slideItems.forEach(el => slideObserver.observe(el));
-
     }
 
     // Slide-academic observer
-
     const academicItems = document.querySelectorAll('.slide-academic');
-
     if (academicItems.length && 'IntersectionObserver' in window) {
-
         const academicObserver = new IntersectionObserver((entries) => {
-
             entries.forEach(entry => {
-
                 if (entry.isIntersecting) {
-
                     entry.target.classList.add('appear');
-
                     setTimeout(() => entry.target.classList.add('settled'), 850);
-
+                    if (isMobileDevice) {
+                        academicObserver.unobserve(entry.target);
+                    }
                 } else {
-
-                    entry.target.classList.remove('appear', 'settled');
-
+                    if (!isMobileDevice) {
+                        entry.target.classList.remove('appear', 'settled');
+                    }
                 }
-
             });
-
         }, { threshold: 0.15 });
-
         academicItems.forEach(el => academicObserver.observe(el));
-
     }
 
     // Project card reveal (replays whenever reached)
-
     const projectRevealItems = document.querySelectorAll('.project-reveal');
-
     if (projectRevealItems.length) {
-
         if (!('IntersectionObserver' in window)) {
-
             projectRevealItems.forEach(el => el.classList.add('project-reveal-visible'));
-
         } else {
-
             const projectRevealObserver = new IntersectionObserver((entries) => {
-
                 entries.forEach(entry => {
-
                     entry.target.classList.toggle('project-reveal-visible', entry.isIntersecting);
-
+                    if (isMobileDevice && entry.isIntersecting) {
+                        projectRevealObserver.unobserve(entry.target);
+                    }
                 });
-
             }, { threshold: 0.12 });
-
             projectRevealItems.forEach(el => projectRevealObserver.observe(el));
-
         }
-
     }
-
 }
 
 /* ----------------------------------------------------
-
    BODY COPY REVEALS - Paragraph-level reading rhythm
-
    ---------------------------------------------------- */
-
 function initTextReveals() {
 
     const paragraphs = document.querySelectorAll('#main-content p:not(.hero-description)');
@@ -1878,31 +1804,45 @@ function initProjectSearchFilter() {
             resetTilt();
         });
 
-        // Mobile Touch Listeners (passive: true allows smooth fluid native scrolling)
+        // Mobile Touch Listeners - Smooth Scroll Priority (Zero layout thrashing on swipe)
+        let touchStartX = 0;
+        let touchStartY = 0;
+        let isTouchScrolling = false;
+
         card.addEventListener('touchstart', (e) => {
             if (e.touches && e.touches.length === 1) {
+                touchStartX = e.touches[0].clientX;
+                touchStartY = e.touches[0].clientY;
+                isTouchScrolling = false;
                 isTouching = true;
-                applyTilt(e.touches[0].clientX, e.touches[0].clientY);
+                requestAnimationFrame(() => {
+                    if (isTouching && !isTouchScrolling) {
+                        applyTilt(touchStartX, touchStartY);
+                    }
+                });
             }
         }, { passive: true });
 
         card.addEventListener('touchmove', (e) => {
-            if (isTouching && e.touches && e.touches.length === 1) {
-                const touch = e.touches[0];
-                const rect = card.getBoundingClientRect();
-                if (touch.clientX >= rect.left - 40 && touch.clientX <= rect.right + 40 &&
-                    touch.clientY >= rect.top - 40 && touch.clientY <= rect.bottom + 40) {
-                    applyTilt(touch.clientX, touch.clientY);
-                } else {
-                    isTouching = false;
+            if (!isTouching || !e.touches || e.touches.length !== 1) return;
+            const touch = e.touches[0];
+            const dy = Math.abs(touch.clientY - touchStartY);
+            const dx = Math.abs(touch.clientX - touchStartX);
+            // If vertical movement detected, user is scrolling the page: cancel tilt immediately
+            if (dy > 6 || dx > 10 || isTouchScrolling) {
+                if (!isTouchScrolling) {
+                    isTouchScrolling = true;
                     resetTilt();
                 }
+                return;
             }
+            applyTilt(touch.clientX, touch.clientY);
         }, { passive: true });
 
         card.addEventListener('touchend', () => {
             if (isTouching) {
                 isTouching = false;
+                isTouchScrolling = false;
                 resetTilt();
             }
         }, { passive: true });
@@ -1910,6 +1850,7 @@ function initProjectSearchFilter() {
         card.addEventListener('touchcancel', () => {
             if (isTouching) {
                 isTouching = false;
+                isTouchScrolling = false;
                 resetTilt();
             }
         }, { passive: true });
@@ -2859,8 +2800,15 @@ function initInteractiveTechField() {
     let physicsRaf = null;
     let isFieldVisible = false;
 
+    const isMobileTech = window.innerWidth <= 1024 || 'ontouchstart' in window;
     function updateFieldPhysics() {
         if (!isFieldVisible) return;
+
+        // Idle check on mobile touch devices to eliminate wasteful frame loops
+        if (isMobileTech && !isMouseActive && Math.abs(currentX - mouseX) < 0.5 && Math.abs(currentY - mouseY) < 0.5) {
+            physicsRaf = null;
+            return;
+        }
 
         // Smooth lerp
         currentX += (mouseX - currentX) * 0.08;
