@@ -1817,20 +1817,18 @@ function initProjectSearchFilter() {
 
             const matchesSearch = title.includes(query) || summary.includes(query) || tech.includes(query);
 
-            const matchesFilter = activeFilter === 'all' || cardCategories.includes(activeFilter);
+            const matchesFilter = activeFilter === 'all' || 
+                cardCategories.includes(activeFilter) ||
+                (activeFilter === 'ai-ml' && (cardCategories.includes('ai') || cardCategories.includes('ml') || cardCategories.includes('ai-ml')));
 
             if (matchesSearch && matchesFilter) {
-
-                card.style.display = 'flex';
-
+                card.classList.remove('project-filtered-out');
+                card.style.setProperty('display', 'flex', 'important');
                 card.style.removeProperty('opacity');
-
                 card.style.removeProperty('transform');
-
             } else {
-
-                card.style.display = 'none';
-
+                card.classList.add('project-filtered-out');
+                card.style.setProperty('display', 'none', 'important');
             }
 
         });
