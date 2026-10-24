@@ -3039,56 +3039,48 @@ function initPortfolioChatbot() {
         launcher.focus();
     }
 
+    function scrollToBottom(smooth = false) {
+        if (!messages) return;
+        requestAnimationFrame(() => {
+            if (smooth) {
+                messages.scrollTo({
+                    top: messages.scrollHeight,
+                    behavior: 'smooth'
+                });
+            } else {
+                messages.scrollTop = messages.scrollHeight;
+            }
+        });
+    }
+
     function addMessage(text, role, project) {
-
         const row = document.createElement('div');
-
         row.className = `chatbot-message ${role}`;
 
         const bubble = document.createElement('div');
-
         bubble.className = 'chatbot-bubble';
-
         bubble.textContent = text;
-
         row.appendChild(bubble);
 
         if (project) {
-
             const card = document.createElement('div');
-
             card.className = 'chatbot-project-card';
-
-            card.innerHTML = `<strong>${project.title}</strong><span>${project.summary}</span><span>Tech · ${project.tech}</span>`;
-
+            card.innerHTML = `<strong>${project.title}</strong><span>${project.summary}</span><span>Tech • ${project.tech}</span>`;
             const action = document.createElement('button');
-
             action.type = 'button';
-
             action.className = 'chatbot-project-action';
-
-            action.textContent = 'Explore Project';
-
+            action.textContent = 'Explore Project →';
             action.addEventListener('click', () => {
-
                 const modalButton = document.querySelector(`.open-modal-btn[data-modal="${project.modal}"]`);
-
                 if (modalButton) modalButton.click();
-
                 closeChat();
-
             });
-
             card.appendChild(action);
-
             bubble.appendChild(card);
-
         }
 
         messages.appendChild(row);
-
-        messages.scrollTop = messages.scrollHeight;
-
+        scrollToBottom(true);
     }
 
     function attachSuggestionChips(container, items) {
@@ -3124,9 +3116,8 @@ function initPortfolioChatbot() {
         });
 
         container.appendChild(wrapper);
-
-        requestAnimationFrame(() => { messages.scrollTop = messages.scrollHeight; });
-
+        scrollToBottom(true);
+        setTimeout(() => scrollToBottom(true), 120);
     }
 
     function addMessageStreaming(text, role, project, suggestions) {
@@ -3210,49 +3201,40 @@ function initPortfolioChatbot() {
         textEl.textContent = '';
 
         const typeNextChar = () => {
-
             if (i >= chars.length) {
-
                 cursor.remove();
-
                 textEl.style.opacity = '1';
-
                 textEl.style.transform = 'translateY(0)';
-
                 attachSuggestionChips(bubble, suggestions);
-
+                scrollToBottom(true);
+                setTimeout(() => scrollToBottom(true), 120);
                 return;
-
             }
 
             const currentChar = chars[i];
-
             textEl.textContent += currentChar;
-
             i += 1;
 
-            const nextDelay = currentChar === ' ' ? 22 : currentChar === '\n' ? 34 : /[.,!?;:]/.test(currentChar) ? 42 : 16;
+            // Continually keep response in view while streaming
+            if (i % 5 === 0 || currentChar === '\n') {
+                scrollToBottom(false);
+            }
+
+            const nextDelay = currentChar === ' ' ? 18 : currentChar === '\n' ? 28 : /[.,!?;:]/.test(currentChar) ? 36 : 14;
 
             if (i >= chars.length) {
-
                 setTimeout(() => {
-
                     cursor.remove();
-
                     textEl.style.opacity = '1';
-
                     textEl.style.transform = 'translateY(0)';
-
                     attachSuggestionChips(bubble, suggestions);
-
-                }, 120);
-
+                    scrollToBottom(true);
+                    setTimeout(() => scrollToBottom(true), 120);
+                }, 80);
                 return;
-
             }
 
             setTimeout(typeNextChar, nextDelay);
-
         };
 
         textEl.style.opacity = '0';
@@ -3572,4 +3554,13 @@ function initPortfolioChatbot() {
 
     document.addEventListener('keydown', (event) => { if (event.key === 'Escape' && !panel.hidden) closeChat(); });
 
+    input.addEventListener('focus', () => {
+        setTimeout(() => scrollToBottom(true), 250);
+    });
+
+    window.addEventListener('resize', () => {
+        if (!panel.hidden) {
+            scrollToBottom(false);
+        }
+    }, { passive: true });
 }
