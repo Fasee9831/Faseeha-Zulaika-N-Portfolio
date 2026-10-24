@@ -4,7 +4,7 @@
 
 [![Live Demo](https://img.shields.io/badge/Live%20Demo-GitHub%20Pages-00F2FE?style=for-the-badge&logo=github&logoColor=white)](https://fasee9831.github.io/Faseeha-Zulaika-N-Portfolio/)
 [![GitHub Profile](https://img.shields.io/badge/GitHub-Fasee9831-181717?style=for-the-badge&logo=github&logoColor=white)](https://github.com/Fasee9831)
-[![License: MIT](https://img.shields.io/badge/License-MIT-38BDF8?style=for-the-badge)](LICENSE)
+[![License: All Rights Reserved](https://img.shields.io/badge/License-All%20Rights%20Reserved-FF0055?style=for-the-badge)](LICENSE)
 [![Responsive](https://img.shields.io/badge/Mobile-100%25%20Responsive-10B981?style=for-the-badge&logo=googlechrome&logoColor=white)](https://fasee9831.github.io/Faseeha-Zulaika-N-Portfolio/)
 
 <br />
@@ -92,6 +92,14 @@ To run this portfolio locally on your machine:
 - **Portfolio**: [fasee9831.github.io/Faseeha-Zulaika-N-Portfolio](https://fasee9831.github.io/Faseeha-Zulaika-N-Portfolio/)
 - **GitHub**: [@Fasee9831](https://github.com/Fasee9831)
 - **Email**: [faseehazulaika@gmail.com](mailto:faseehazulaika@gmail.com)
+
+---
+
+## 🔒 Copyright & Intellectual Property
+
+© 2026 **Faseeha Zulaika N**. All Rights Reserved.
+
+This repository, including all custom code, design systems, assets, animations, and written text, is personal intellectual property. **Cloning, copying, distributing, or deploying this portfolio or any substantial portion of it for public or commercial use without prior written consent is strictly prohibited.**
 
 ---
 
