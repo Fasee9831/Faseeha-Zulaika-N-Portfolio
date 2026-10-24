@@ -15,7 +15,9 @@
 
 <br />
 
-<img src="portfolio-preview.png" alt="Faseeha Zulaika N Developer Portfolio Preview" width="100%" style="border-radius: 12px; box-shadow: 0 20px 40px rgba(0,0,0,0.6);" />
+<a href="https://fasee9831.github.io/Faseeha-Zulaika-N-Portfolio/" target="_blank" rel="noopener noreferrer">
+  <img src="portfolio-preview.png" alt="Faseeha Zulaika N Developer Portfolio Preview" width="100%" style="border-radius: 12px; box-shadow: 0 20px 40px rgba(0,0,0,0.6);" />
+</a>
 
 </div>
 
