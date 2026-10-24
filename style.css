@@ -62073,14 +62073,21 @@ body.light-theme .cmd-option:hover, body.light-theme .cmd-option.selected {
                     0 0 15px rgba(168, 85, 247, 0.18) !important;
     }
 
-    /* Image Container */
+    /* Image Container with Cyber Shimmer Skeleton Placeholder */
     .project-card-image {
         height: 220px !important;
         position: relative !important;
         overflow: hidden !important;
         border-bottom: 1px solid rgba(56, 189, 248, 0.12) !important;
-        background: rgba(9, 14, 26, 0.6) !important;
+        background: linear-gradient(110deg, #090e1a 12%, #141f36 28%, #090e1a 45%) !important;
+        background-size: 200% 100% !important;
+        animation: cardImgShimmer 2.2s linear infinite !important;
         cursor: pointer;
+    }
+
+    @keyframes cardImgShimmer {
+        0% { background-position: 200% 0; }
+        100% { background-position: -200% 0; }
     }
 
     .project-card-image img {
@@ -62088,7 +62095,8 @@ body.light-theme .cmd-option:hover, body.light-theme .cmd-option.selected {
         height: 100% !important;
         object-fit: cover !important;
         filter: brightness(0.92) contrast(1.05);
-        transition: transform 0.65s cubic-bezier(0.16, 1, 0.3, 1), filter 0.4s ease !important;
+        transition: transform 0.65s cubic-bezier(0.16, 1, 0.3, 1), filter 0.4s ease, opacity 0.35s ease-out !important;
+        content-visibility: auto;
     }
 
     .project-card:hover .project-card-image img,
