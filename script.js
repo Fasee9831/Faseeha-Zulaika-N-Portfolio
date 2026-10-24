@@ -220,6 +220,16 @@ function initPreloader() {
     window.addEventListener('wheel', event => { if (!preloader.classList.contains('loaded')) { event.preventDefault(); targetProgress = Math.min(100, targetProgress + 3); } }, { passive: false });
     const loadingInterval = setInterval(() => { targetProgress = Math.min(100, targetProgress + (reducedMotion ? 10 : 5.2)); if (targetProgress >= 100) clearInterval(loadingInterval); }, reducedMotion ? 80 : 100);
     progressFrame = requestAnimationFrame(renderProgress);
+
+    // Fail-safe release timer to guarantee page is 100% unlocked on all mobile devices
+    setTimeout(() => {
+        if (!preloader.classList.contains('loaded')) {
+            enterPortfolio();
+        }
+        window.removeEventListener('scroll', keepPageAtTop);
+        document.body.style.overflow = '';
+        document.documentElement.style.overflow = '';
+    }, 2200);
 }
 
 /* ----------------------------------------------------

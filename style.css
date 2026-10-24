@@ -1398,7 +1398,7 @@ input, textarea { user-select: text; -webkit-user-select: text; }
 
 
 
-html { scroll-behavior: initial; overflow-x: hidden; }
+html { scroll-behavior: initial; }
 
 
 

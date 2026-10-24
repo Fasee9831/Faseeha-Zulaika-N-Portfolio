@@ -158,7 +158,7 @@
 
 
 
-    <link rel="stylesheet" href="style.css?v=41.0">
+    <link rel="stylesheet" href="style.css?v=42.0">
 
     <style id="mobile-critical-fixes">
 
@@ -170,24 +170,16 @@
 
         @media (max-width: 768px) {
 
-            /* 1. Global Container & Fluid Mobile Scrolling Engine */
+            /* 1. Global Container & Natural Mobile Viewport Scrolling */
             html {
-                overflow-x: clip !important;
-                overflow-y: scroll !important;
-                -webkit-overflow-scrolling: touch !important;
                 width: 100% !important;
-                height: auto !important;
-                min-height: 100% !important;
-                scroll-behavior: smooth !important;
+                max-width: 100% !important;
             }
             body {
-                overflow-x: clip !important;
-                overflow-y: visible !important;
-                -webkit-overflow-scrolling: touch !important;
                 width: 100% !important;
-                height: auto !important;
-                min-height: 100% !important;
-                position: relative !important;
+                max-width: 100% !important;
+                overflow-x: hidden !important;
+                -webkit-overflow-scrolling: touch !important;
             }
 
             /* GPU Layer Promotion & Fast Hardware Rasterization */
@@ -20037,7 +20029,7 @@
 
 
 
-    <script src="script.js?v=12.0"></script>
+    <script src="script.js?v=13.0"></script>
 
 
 
