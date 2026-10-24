@@ -301,7 +301,9 @@ function initTheme() {
    ---------------------------------------------------- */
 
 function initCustomCursor() {
-
+    if (window.innerWidth <= 768 || 'ontouchstart' in window || window.matchMedia('(pointer: coarse)').matches) {
+        return;
+    }
     const glow = document.getElementById('cursor-glow');
 
     const dot = document.getElementById('cursor-dot');
@@ -395,17 +397,14 @@ function initCustomCursor() {
 let lenisInstance = null;
 
 function initLenisScroll() {
-
     const navbar = document.getElementById('navbar');
-
     const progressBar = document.getElementById('scroll-progress');
-
     let lastScrollTop = 0;
 
-    if (typeof Lenis !== 'undefined') {
+    const isTouchMobile = window.innerWidth <= 768 || ('ontouchstart' in window && !window.matchMedia('(hover: hover)').matches);
 
+    if (!isTouchMobile && typeof Lenis !== 'undefined') {
         lenisInstance = new Lenis({
-
             duration: 1.15,
 
             easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
@@ -1905,31 +1904,42 @@ function initProjectSearchFilter() {
         }, { passive: true });
     });
 
-    // Mobile Device Orientation (Gyroscope) Tilt
+    // Mobile Device Orientation (Gyroscope) Tilt (Zero Layout Thrashing via IntersectionObserver)
     if (window.DeviceOrientationEvent && ('ontouchstart' in window || navigator.maxTouchPoints > 0)) {
+        const activeCards = new Set();
+        if ('IntersectionObserver' in window) {
+            const tiltObserver = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        activeCards.add(entry.target);
+                    } else {
+                        activeCards.delete(entry.target);
+                        if (!entry.target.classList.contains('is-tilted')) {
+                            entry.target.style.transform = '';
+                        }
+                    }
+                });
+            }, { threshold: 0.15 });
+            projectCards.forEach(card => tiltObserver.observe(card));
+        }
+
         let gyroRaf = null;
         window.addEventListener('deviceorientation', (e) => {
-            if (e.gamma === null || e.beta === null) return;
+            if (e.gamma === null || e.beta === null || activeCards.size === 0) return;
             const gamma = Math.max(-20, Math.min(20, e.gamma));
             const restingPitch = 45;
             const beta = Math.max(-25, Math.min(25, e.beta - restingPitch));
 
             if (gyroRaf) cancelAnimationFrame(gyroRaf);
             gyroRaf = requestAnimationFrame(() => {
-                const vh = window.innerHeight;
-                projectCards.forEach(card => {
+                const rotY = (gamma / 20) * 8;
+                const rotX = (-beta / 25) * 8;
+                activeCards.forEach(card => {
                     if (card.classList.contains('is-tilted') && card.style.transition === 'none') {
-                        return; // Active touch or mouse is controlling it
+                        return; // Active touch or mouse takes priority
                     }
-                    const rect = card.getBoundingClientRect();
-                    if (rect.bottom > 60 && rect.top < vh - 60) {
-                        const rotY = (gamma / 20) * 8;
-                        const rotX = (-beta / 25) * 8;
-                        card.style.transition = 'transform 0.15s ease-out';
-                        card.style.transform = `perspective(1000px) rotateX(${rotX.toFixed(2)}deg) rotateY(${rotY.toFixed(2)}deg) translateY(-4px)`;
-                    } else if (card.style.transform && card.style.transform !== 'none' && !card.classList.contains('is-tilted')) {
-                        card.style.transform = '';
-                    }
+                    card.style.transition = 'transform 0.15s ease-out';
+                    card.style.transform = `perspective(1000px) rotateX(${rotX.toFixed(2)}deg) rotateY(${rotY.toFixed(2)}deg) translateY(-4px)`;
                 });
             });
         }, { passive: true });
@@ -2961,8 +2971,15 @@ function initPortfolioChatbot() {
     const clearButton = document.getElementById('portfolio-chatbot-clear');
 
     const recruiterButton = document.getElementById('portfolio-chatbot-recruiter');
+    const sendButton = form ? form.querySelector('.chatbot-send-button') : null;
 
     if (!chatbot || !launcher || !panel || !messages || !suggestions || !form || !input) return;
+
+    if (sendButton) {
+        input.addEventListener('input', () => {
+            sendButton.disabled = !input.value.trim();
+        });
+    }
 
     const fallback = "I don't have that detail in her portfolio yet, but I can help you explore her projects, skills, experience, or career journey.";
 
@@ -3011,31 +3028,25 @@ function initPortfolioChatbot() {
     };
 
     function openChat() {
-
         panel.hidden = false;
-
         launcher.setAttribute('aria-expanded', 'true');
-
+        chatbot.classList.add('chat-open');
+        document.body.classList.add('chat-open-locked');
         if (!messages.children.length) {
-
             addWelcomeMessage();
-
             renderStarterSuggestions();
-
         }
-
-        setTimeout(() => input.focus(), 80);
-
+        if (window.innerWidth > 768 && !('ontouchstart' in window)) {
+            setTimeout(() => input.focus(), 80);
+        }
     }
 
     function closeChat() {
-
         panel.hidden = true;
-
         launcher.setAttribute('aria-expanded', 'false');
-
+        chatbot.classList.remove('chat-open');
+        document.body.classList.remove('chat-open-locked');
         launcher.focus();
-
     }
 
     function addMessage(text, role, project) {
@@ -3537,6 +3548,7 @@ function initPortfolioChatbot() {
         addMessage(cleanQuestion, 'user');
 
         input.value = '';
+        if (sendButton) sendButton.disabled = true;
 
         showTyping();
 
