@@ -158,7 +158,7 @@
 
 
 
-    <link rel="stylesheet" href="style.css?v=39.0">
+    <link rel="stylesheet" href="style.css?v=40.0">
 
     <style id="mobile-critical-fixes">
 
@@ -170,16 +170,41 @@
 
         @media (max-width: 768px) {
 
-            /* 1. Global Container & Layout System */
-
-            html, body {
-
+            /* 1. Global Container & Ultra-Smooth Touch Momentum Engine */
+            html {
                 overflow-x: hidden !important;
-
                 width: 100% !important;
-
                 max-width: 100% !important;
+                scroll-behavior: smooth !important;
+                -webkit-overflow-scrolling: touch !important;
+                touch-action: pan-y !important;
+            }
+            body {
+                overflow-x: hidden !important;
+                width: 100% !important;
+                max-width: 100% !important;
+                -webkit-overflow-scrolling: touch !important;
+                overscroll-behavior-y: none !important;
+                touch-action: pan-y !important;
+            }
 
+            /* Offscreen Section Virtualization: Skips layout & paint until near viewport for 120Hz smoothness */
+            #about, #skills, #projects, #experience, #awards, #contact {
+                content-visibility: auto !important;
+                contain-intrinsic-size: 1px 700px !important;
+            }
+
+            /* GPU Layer Promotion & Fast Hardware Rasterization */
+            .project-card, .academic-card, .award-card, .stat-card, .glass-card, .portfolio-chatbot-panel {
+                transform: translateZ(0) !important;
+                backface-visibility: hidden !important;
+                backdrop-filter: blur(8px) !important;
+                -webkit-backdrop-filter: blur(8px) !important;
+            }
+
+            /* Prevent excessive VRAM consumption and tap delays */
+            * {
+                -webkit-tap-highlight-color: transparent !important;
             }
 
             .container {
@@ -3982,7 +4007,7 @@
 
 
 
-                            <img src="me.jpeg" alt="Faseeha Zulaika - AI &amp; Data Science Developer" class="profile-avatar-img">
+                            <img decoding="async" src="me.jpeg" alt="Faseeha Zulaika - AI &amp; Data Science Developer" class="profile-avatar-img">
 
 
 
@@ -5938,7 +5963,7 @@
 
 
 
-                            <img src="ZingyByte AI Food Concierge.png" alt="ZingyByte AI Food Concierge Preview" class="zingybyte-preview-img" loading="lazy">
+                            <img decoding="async" src="ZingyByte AI Food Concierge.png" alt="ZingyByte AI Food Concierge Preview" class="zingybyte-preview-img" loading="lazy">
 
 
 
@@ -6130,7 +6155,7 @@
 
 
 
-                            <img src="ZendiMind AI Sentiment Analyzer Showcase 1. png.png" alt="ZendiMind AI Sentiment Analyzer Showcase" class="zendimind-showcase-preview-img" loading="lazy" onerror="this.src='dashboard/zendimind_showcase.png'">
+                            <img decoding="async" src="ZendiMind AI Sentiment Analyzer Showcase 1. png.png" alt="ZendiMind AI Sentiment Analyzer Showcase" class="zendimind-showcase-preview-img" loading="lazy" onerror="this.src='dashboard/zendimind_showcase.png'">
 
 
 
@@ -6386,7 +6411,7 @@
 
 
 
-                            <img src="dashboard/prevdash.png" alt="Power BI Multi-Dashboard Showcase Preview" class="powerbi-preview-img" loading="lazy" onerror="this.src='prevdash.png'">
+                            <img decoding="async" src="dashboard/prevdash.png" alt="Power BI Multi-Dashboard Showcase Preview" class="powerbi-preview-img" loading="lazy" onerror="this.src='prevdash.png'">
 
 
 
@@ -6674,7 +6699,7 @@
 
 
 
-                            <img src="Smart Parking AI Dashboard.png" alt="Smart Parking AI-Powered Space Detection Showcase Preview" class="parking-preview-img" loading="lazy" onerror="this.src='dashboard/smart_parking_showcase.png'">
+                            <img decoding="async" src="Smart Parking AI Dashboard.png" alt="Smart Parking AI-Powered Space Detection Showcase Preview" class="parking-preview-img" loading="lazy" onerror="this.src='dashboard/smart_parking_showcase.png'">
 
 
 
@@ -6882,7 +6907,7 @@
 
 
 
-                            <img src="Next Gen Phoenix Education Platform.png" alt="Next Gen Phoenix Education Platform Showcase Preview" class="phoenix-preview-img" loading="lazy">
+                            <img decoding="async" src="Next Gen Phoenix Education Platform.png" alt="Next Gen Phoenix Education Platform Showcase Preview" class="phoenix-preview-img" loading="lazy">
 
 
 
@@ -7074,7 +7099,7 @@
 
 
 
-                            <img src="AuraFaz Luxury Fragrance Showcase.png" alt="AuraFaz Luxury Fragrance Hub Showcase Preview" class="aurafaz-preview-img" loading="lazy" onerror="this.src='dashboard/aurafaz_showcase.png'">
+                            <img decoding="async" src="AuraFaz Luxury Fragrance Showcase.png" alt="AuraFaz Luxury Fragrance Hub Showcase Preview" class="aurafaz-preview-img" loading="lazy" onerror="this.src='dashboard/aurafaz_showcase.png'">
 
 
 
@@ -7306,7 +7331,7 @@
 
 
 
-                            <img src="dashboard/preview.png" alt="The Brand Touch Studio Showcase Preview" class="brandtouch-preview-img" loading="lazy" onerror="this.src='preview.png'">
+                            <img decoding="async" src="dashboard/preview.png" alt="The Brand Touch Studio Showcase Preview" class="brandtouch-preview-img" loading="lazy" onerror="this.src='preview.png'">
 
 
 
@@ -11050,7 +11075,7 @@
 
                     <div class="chatbot-brand-mark chatbot-robot-avatar" aria-hidden="true">
 
-                        <img src="chatbot-poster.png" alt="Robot Mascot Avatar" class="chatbot-header-robot">
+                        <img decoding="async" src="chatbot-poster.png" alt="Robot Mascot Avatar" class="chatbot-header-robot">
 
                     </div>
 
@@ -11404,7 +11429,7 @@
 
 
 
-                        <img src="ZingyByte AI Food Concierge.png" alt="ZingyByte AI Food Concierge Showcase" class="zingybyte-modal-showcase-img" loading="lazy">
+                        <img decoding="async" src="ZingyByte AI Food Concierge.png" alt="ZingyByte AI Food Concierge Showcase" class="zingybyte-modal-showcase-img" loading="lazy">
 
 
 
@@ -11916,7 +11941,7 @@
 
 
 
-                        <img src="dashboard/zendimind_robot.png" alt="ZendiMind Robot" class="live-action-robot">
+                        <img decoding="async" src="dashboard/zendimind_robot.png" alt="ZendiMind Robot" class="live-action-robot">
 
 
 
@@ -12012,7 +12037,7 @@
 
 
 
-                        <img src="ZendiMind AI Sentiment Analyzer Showcase 1. png.png" alt="ZendiMind AI Sentiment Analyzer Showcase" class="zendimind-modal-showcase-img" loading="lazy" onerror="this.src='dashboard/zendimind_showcase.png'">
+                        <img decoding="async" src="ZendiMind AI Sentiment Analyzer Showcase 1. png.png" alt="ZendiMind AI Sentiment Analyzer Showcase" class="zendimind-modal-showcase-img" loading="lazy" onerror="this.src='dashboard/zendimind_showcase.png'">
 
 
 
@@ -13076,7 +13101,7 @@
 
 
 
-                                        <img src="dashboard/spotify_2k.png" alt="Spotify Music Intelligence Dashboard" class="dash-embed-img" loading="lazy">
+                                        <img decoding="async" src="dashboard/spotify_2k.png" alt="Spotify Music Intelligence Dashboard" class="dash-embed-img" loading="lazy">
 
 
 
@@ -13404,7 +13429,7 @@
 
 
 
-                                        <img src="dashboard/bigmart_2k.png" alt="BigMart Sales Analysis Dashboard" class="dash-embed-img" loading="lazy">
+                                        <img decoding="async" src="dashboard/bigmart_2k.png" alt="BigMart Sales Analysis Dashboard" class="dash-embed-img" loading="lazy">
 
 
 
@@ -13740,7 +13765,7 @@
 
 
 
-                                        <img src="dashboard/student_dashboard_overview.png" alt="Student Analytics Dashboard: Overview & KPIs" class="dash-embed-img" loading="lazy">
+                                        <img decoding="async" src="dashboard/student_dashboard_overview.png" alt="Student Analytics Dashboard: Overview & KPIs" class="dash-embed-img" loading="lazy">
 
 
 
@@ -13956,7 +13981,7 @@
 
 
 
-                                        <img src="dashboard/student_dashboard_courses.png" alt="Student Analytics Dashboard: Courses & Demographics" class="dash-embed-img" loading="lazy">
+                                        <img decoding="async" src="dashboard/student_dashboard_courses.png" alt="Student Analytics Dashboard: Courses & Demographics" class="dash-embed-img" loading="lazy">
 
 
 
@@ -14624,7 +14649,7 @@
 
 
 
-                        <img src="Smart Parking AI Dashboard.png" alt="Smart Parking AI Dashboard Showcase" class="parking-modal-showcase-img" loading="lazy" onerror="this.src='dashboard/smart_parking_showcase.png'">
+                        <img decoding="async" src="Smart Parking AI Dashboard.png" alt="Smart Parking AI Dashboard Showcase" class="parking-modal-showcase-img" loading="lazy" onerror="this.src='dashboard/smart_parking_showcase.png'">
 
 
 
@@ -15080,7 +15105,7 @@
 
 
 
-                        <img src="Next Gen Phoenix Education Platform.png" alt="Next Gen Phoenix Education Platform Showcase" class="phoenix-modal-showcase-img" loading="lazy">
+                        <img decoding="async" src="Next Gen Phoenix Education Platform.png" alt="Next Gen Phoenix Education Platform Showcase" class="phoenix-modal-showcase-img" loading="lazy">
 
 
 
@@ -15536,7 +15561,7 @@
 
 
 
-                        <img src="AuraFaz Luxury Fragrance Showcase.png" alt="AuraFaz Luxury Fragrance Hub Showcase" class="aurafaz-modal-showcase-img" loading="lazy" onerror="this.src='dashboard/aurafaz_showcase.png'">
+                        <img decoding="async" src="AuraFaz Luxury Fragrance Showcase.png" alt="AuraFaz Luxury Fragrance Hub Showcase" class="aurafaz-modal-showcase-img" loading="lazy" onerror="this.src='dashboard/aurafaz_showcase.png'">
 
 
 
@@ -16040,7 +16065,7 @@
 
 
 
-                        <img src="dashboard/preview.png" alt="The Brand Touch Studio Showcase" class="brandtouch-modal-showcase-img" loading="lazy" onerror="this.src='preview.png'">
+                        <img decoding="async" src="dashboard/preview.png" alt="The Brand Touch Studio Showcase" class="brandtouch-modal-showcase-img" loading="lazy" onerror="this.src='preview.png'">
 
 
 
@@ -16720,7 +16745,7 @@
 
 
 
-                            <img src="dashboard/student_dashboard_overview.png" alt="Student Analytics Dashboard: Overview & KPIs" class="dashboard-preview-img" loading="lazy">
+                            <img decoding="async" src="dashboard/student_dashboard_overview.png" alt="Student Analytics Dashboard: Overview & KPIs" class="dashboard-preview-img" loading="lazy">
 
 
 
@@ -16816,7 +16841,7 @@
 
 
 
-                            <img src="dashboard/student_dashboard_courses.png" alt="Student Analytics Dashboard: Courses & Demographics" class="dashboard-preview-img" loading="lazy">
+                            <img decoding="async" src="dashboard/student_dashboard_courses.png" alt="Student Analytics Dashboard: Courses & Demographics" class="dashboard-preview-img" loading="lazy">
 
 
 
@@ -17800,7 +17825,7 @@
 
 
 
-                            <img src="dashboard/spotify_2k.png" alt="Spotify Music Intelligence Dashboard" class="dashboard-preview-img" loading="lazy">
+                            <img decoding="async" src="dashboard/spotify_2k.png" alt="Spotify Music Intelligence Dashboard" class="dashboard-preview-img" loading="lazy">
 
 
 
@@ -18768,7 +18793,7 @@
 
 
 
-                            <img src="dashboard/bigmart_2k.png" alt="BigMart Sales Analysis Dashboard" class="dashboard-preview-img" loading="lazy">
+                            <img decoding="async" src="dashboard/bigmart_2k.png" alt="BigMart Sales Analysis Dashboard" class="dashboard-preview-img" loading="lazy">
 
 
 
@@ -19640,7 +19665,7 @@
 
 
 
-                <img src="dashboard/student_dashboard_overview.png" alt="Student Analytics Dashboard" class="dash-lightbox-img" id="dash-lightbox-img">
+                <img decoding="async" src="dashboard/student_dashboard_overview.png" alt="Student Analytics Dashboard" class="dash-lightbox-img" id="dash-lightbox-img">
 
 
 
@@ -19712,7 +19737,7 @@
 
 
 
-                    <img src="dashboard/student_dashboard_overview.png" alt="Thumbnail Overview">
+                    <img decoding="async" src="dashboard/student_dashboard_overview.png" alt="Thumbnail Overview">
 
 
 
@@ -19768,7 +19793,7 @@
 
 
 
-                    <img src="dashboard/student_dashboard_courses.png" alt="Thumbnail Courses">
+                    <img decoding="async" src="dashboard/student_dashboard_courses.png" alt="Thumbnail Courses">
 
 
 
@@ -19824,7 +19849,7 @@
 
 
 
-                    <img src="dashboard/spotify_2k.png" alt="Thumbnail Spotify">
+                    <img decoding="async" src="dashboard/spotify_2k.png" alt="Thumbnail Spotify">
 
 
 
@@ -19880,7 +19905,7 @@
 
 
 
-                    <img src="dashboard/bigmart_2k.png" alt="Thumbnail BigMart">
+                    <img decoding="async" src="dashboard/bigmart_2k.png" alt="Thumbnail BigMart">
 
 
 
@@ -20016,7 +20041,7 @@
 
 
 
-    <script src="script.js?v=10.0"></script>
+    <script src="script.js?v=11.0"></script>
 
 
 

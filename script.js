@@ -401,7 +401,7 @@ function initLenisScroll() {
     const progressBar = document.getElementById('scroll-progress');
     let lastScrollTop = 0;
 
-    const isTouchMobile = window.innerWidth <= 768 || ('ontouchstart' in window && !window.matchMedia('(hover: hover)').matches);
+    const isTouchMobile = window.innerWidth <= 1024 || 'ontouchstart' in window || (navigator.maxTouchPoints && navigator.maxTouchPoints > 0);
 
     if (!isTouchMobile && typeof Lenis !== 'undefined') {
         lenisInstance = new Lenis({
@@ -902,6 +902,9 @@ function initTextReveals() {
    ---------------------------------------------------- */
 
 function initMagneticButtons() {
+    if (window.innerWidth <= 1024 || 'ontouchstart' in window || (navigator.maxTouchPoints && navigator.maxTouchPoints > 0)) {
+        return; // Bypass magnetic mouse cursor physics on touch mobile
+    }
 
     const magneticBtns = document.querySelectorAll('.magnetic-btn');
 
@@ -1174,7 +1177,7 @@ function initScrollAnimations() {
 
                         start: 'top 85%',
 
-                        toggleActions: 'play reverse play reverse'
+                        toggleActions: (window.innerWidth <= 768 || 'ontouchstart' in window) ? 'play none none none' : 'play reverse play reverse'
 
                     }
 
@@ -1202,7 +1205,7 @@ function initScrollAnimations() {
 
                     start: 'top 85%',
 
-                    toggleActions: 'play reverse play reverse'
+                    toggleActions: (window.innerWidth <= 768 || 'ontouchstart' in window) ? 'play none none none' : 'play reverse play reverse'
 
                 }
 
@@ -1238,7 +1241,7 @@ function initScrollAnimations() {
 
                         start: 'top 85%',
 
-                        toggleActions: 'play reverse play reverse'
+                        toggleActions: (window.innerWidth <= 768 || 'ontouchstart' in window) ? 'play none none none' : 'play reverse play reverse'
 
                     }
 
@@ -1280,7 +1283,7 @@ function initScrollAnimations() {
 
                         start: 'top 88%',
 
-                        toggleActions: 'play reverse play reverse'
+                        toggleActions: (window.innerWidth <= 768 || 'ontouchstart' in window) ? 'play none none none' : 'play reverse play reverse'
 
                     }
 
@@ -1924,8 +1927,13 @@ function initProjectSearchFilter() {
         }
 
         let gyroRaf = null;
+        let isTouchInteracting = false;
+        window.addEventListener('touchstart', () => { isTouchInteracting = true; }, { passive: true });
+        window.addEventListener('touchend', () => { setTimeout(() => { isTouchInteracting = false; }, 200); }, { passive: true });
+        window.addEventListener('touchcancel', () => { isTouchInteracting = false; }, { passive: true });
+
         window.addEventListener('deviceorientation', (e) => {
-            if (e.gamma === null || e.beta === null || activeCards.size === 0) return;
+            if (isTouchInteracting || e.gamma === null || e.beta === null || activeCards.size === 0) return;
             const gamma = Math.max(-20, Math.min(20, e.gamma));
             const restingPitch = 45;
             const beta = Math.max(-25, Math.min(25, e.beta - restingPitch));
@@ -2839,8 +2847,13 @@ function initInteractiveTechField() {
         }, { passive: true });
     }
 
-    // High-performance RAF animation loop
+    // High-performance RAF animation loop with IntersectionObserver
+    let physicsRaf = null;
+    let isFieldVisible = false;
+
     function updateFieldPhysics() {
+        if (!isFieldVisible) return;
+
         // Smooth lerp
         currentX += (mouseX - currentX) * 0.08;
         currentY += (mouseY - currentY) * 0.08;
@@ -2902,10 +2915,31 @@ function initInteractiveTechField() {
             }
         }
 
-        requestAnimationFrame(updateFieldPhysics);
+        if (isFieldVisible) {
+            physicsRaf = requestAnimationFrame(updateFieldPhysics);
+        }
     }
 
-    requestAnimationFrame(updateFieldPhysics);
+    if ('IntersectionObserver' in window) {
+        const skillsSection = document.getElementById('skills') || field;
+        const fieldObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                isFieldVisible = entry.isIntersecting;
+                if (isFieldVisible) {
+                    if (!physicsRaf) physicsRaf = requestAnimationFrame(updateFieldPhysics);
+                } else {
+                    if (physicsRaf) {
+                        cancelAnimationFrame(physicsRaf);
+                        physicsRaf = null;
+                    }
+                }
+            });
+        }, { threshold: 0.05 });
+        fieldObserver.observe(skillsSection);
+    } else {
+        isFieldVisible = true;
+        physicsRaf = requestAnimationFrame(updateFieldPhysics);
+    }
 }
 
 /* Helper: Toast Notifications */
