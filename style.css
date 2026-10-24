@@ -61998,3 +61998,288 @@ body.light-theme .cmd-option:hover, body.light-theme .cmd-option.selected {
         margin-top: 0.25rem !important;
     }
 }
+
+/* ==========================================================================
+   DESKTOP ONLY: PREMIUM PROJECT CARD UI ENHANCEMENTS (Min-Width: 1025px)
+   ========================================================================== */
+@media (min-width: 1025px) {
+    .projects-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
+        gap: 2.25rem;
+        align-items: stretch;
+    }
+
+    .project-card {
+        border-radius: 20px !important;
+        background: linear-gradient(155deg, rgba(16, 23, 42, 0.75) 0%, rgba(9, 14, 26, 0.90) 100%) !important;
+        backdrop-filter: blur(20px) saturate(170%) !important;
+        -webkit-backdrop-filter: blur(20px) saturate(170%) !important;
+        border: 1px solid rgba(56, 189, 248, 0.16) !important;
+        box-shadow: 0 12px 32px -8px rgba(0, 0, 0, 0.65), 0 0 0 1px rgba(255, 255, 255, 0.04) !important;
+        transition: transform 0.45s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.45s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.35s ease !important;
+        overflow: hidden !important;
+        position: relative !important;
+    }
+
+    /* Top Specular Shimmer Highlight line */
+    .project-card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 1px;
+        background: linear-gradient(90deg, transparent 5%, rgba(56, 189, 248, 0.5) 50%, rgba(168, 85, 247, 0.5) 80%, transparent 95%);
+        opacity: 0.6;
+        transition: opacity 0.4s ease, height 0.4s ease;
+        z-index: 10;
+        pointer-events: none;
+    }
+
+    /* Ambient Corner Glow on Hover */
+    .project-card::after {
+        content: '';
+        position: absolute;
+        top: -60px;
+        right: -60px;
+        width: 160px;
+        height: 160px;
+        border-radius: 50%;
+        background: radial-gradient(circle, rgba(56, 189, 248, 0.15) 0%, transparent 70%);
+        pointer-events: none;
+        opacity: 0;
+        transition: opacity 0.5s ease, transform 0.5s ease;
+        z-index: 1;
+    }
+
+    .project-card:hover::after,
+    .project-card.is-tilted::after {
+        opacity: 1;
+        transform: scale(1.2);
+    }
+
+    .project-card:hover::before,
+    .project-card.is-tilted::before {
+        opacity: 1;
+        height: 2px;
+    }
+
+    .project-card:hover,
+    .project-card.is-tilted {
+        border-color: rgba(56, 189, 248, 0.45) !important;
+        box-shadow: 0 24px 50px -12px rgba(0, 0, 0, 0.85),
+                    0 0 35px -5px rgba(56, 189, 248, 0.28),
+                    0 0 15px rgba(168, 85, 247, 0.18) !important;
+    }
+
+    /* Image Container */
+    .project-card-image {
+        height: 220px !important;
+        position: relative !important;
+        overflow: hidden !important;
+        border-bottom: 1px solid rgba(56, 189, 248, 0.12) !important;
+        background: rgba(9, 14, 26, 0.6) !important;
+        cursor: pointer;
+    }
+
+    .project-card-image img {
+        width: 100% !important;
+        height: 100% !important;
+        object-fit: cover !important;
+        filter: brightness(0.92) contrast(1.05);
+        transition: transform 0.65s cubic-bezier(0.16, 1, 0.3, 1), filter 0.4s ease !important;
+    }
+
+    .project-card:hover .project-card-image img,
+    .project-card.is-tilted .project-card-image img {
+        transform: scale(1.06) !important;
+        filter: brightness(1.04) contrast(1.08) !important;
+    }
+
+    /* Cinematic Dark Vignette Overlay over Image */
+    .project-card-image::before {
+        content: '';
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(180deg, rgba(9, 14, 26, 0.05) 0%, rgba(9, 14, 26, 0.2) 50%, rgba(9, 14, 26, 0.85) 100%);
+        z-index: 2;
+        pointer-events: none;
+        transition: opacity 0.4s ease;
+    }
+
+    .project-card:hover .project-card-image::before {
+        opacity: 0.7;
+    }
+
+    /* Floating Status Badge on Top-Right */
+    .project-card-badge {
+        top: 14px !important;
+        right: 14px !important;
+        padding: 0.35rem 0.85rem !important;
+        background: rgba(9, 14, 26, 0.75) !important;
+        backdrop-filter: blur(12px) !important;
+        -webkit-backdrop-filter: blur(12px) !important;
+        border: 1px solid rgba(56, 189, 248, 0.3) !important;
+        border-radius: 999px !important;
+        font-size: 0.72rem !important;
+        font-weight: 700 !important;
+        letter-spacing: 0.6px !important;
+        color: #e2e8f0 !important;
+        box-shadow: 0 4px 14px rgba(0, 0, 0, 0.4) !important;
+        z-index: 4 !important;
+        transition: border-color 0.3s ease, box-shadow 0.3s ease !important;
+    }
+
+    .project-card:hover .project-card-badge {
+        border-color: rgba(56, 189, 248, 0.7) !important;
+        box-shadow: 0 0 12px rgba(56, 189, 248, 0.35) !important;
+    }
+
+    /* Card Body */
+    .project-card-body {
+        padding: 1.75rem 1.65rem !important;
+        display: flex !important;
+        flex-direction: column !important;
+        gap: 0.95rem !important;
+        flex-grow: 1 !important;
+        position: relative !important;
+        z-index: 3 !important;
+    }
+
+    /* Category & Status Meta Row */
+    .project-card-meta {
+        display: flex !important;
+        align-items: center !important;
+        justify-content: space-between !important;
+    }
+
+    .proj-date {
+        font-size: 0.74rem !important;
+        font-weight: 700 !important;
+        letter-spacing: 0.9px !important;
+        text-transform: uppercase !important;
+        color: #38bdf8 !important;
+    }
+
+    .proj-status {
+        padding: 0.2rem 0.65rem !important;
+        border-radius: 999px !important;
+        font-size: 0.7rem !important;
+        font-weight: 700 !important;
+        letter-spacing: 0.5px !important;
+        text-transform: uppercase !important;
+        display: inline-flex !important;
+        align-items: center !important;
+        gap: 5px !important;
+    }
+
+    .status-done {
+        background: rgba(34, 197, 94, 0.12) !important;
+        color: #4ade80 !important;
+        border: 1px solid rgba(34, 197, 94, 0.28) !important;
+    }
+
+    .status-prod {
+        background: rgba(168, 85, 247, 0.12) !important;
+        color: #c084fc !important;
+        border: 1px solid rgba(168, 85, 247, 0.28) !important;
+    }
+
+    .status-active {
+        background: rgba(56, 189, 248, 0.12) !important;
+        color: #38bdf8 !important;
+        border: 1px solid rgba(56, 189, 248, 0.28) !important;
+    }
+
+    /* Title */
+    .project-card-title {
+        font-family: var(--font-heading) !important;
+        font-size: 1.32rem !important;
+        font-weight: 700 !important;
+        line-height: 1.35 !important;
+        color: #f8fafc !important;
+        margin: 0 !important;
+        transition: color 0.3s ease, text-shadow 0.3s ease !important;
+    }
+
+    .project-card:hover .project-card-title,
+    .project-card.is-tilted .project-card-title {
+        color: #ffffff !important;
+        text-shadow: 0 0 20px rgba(56, 189, 248, 0.35) !important;
+    }
+
+    /* Summary */
+    .project-card-summary {
+        color: #94a3b8 !important;
+        font-size: 0.91rem !important;
+        line-height: 1.62 !important;
+        margin: 0 !important;
+    }
+
+    /* Tech Stack Badges */
+    .project-card-tech {
+        display: flex !important;
+        flex-wrap: wrap !important;
+        gap: 0.45rem !important;
+        margin-top: auto !important;
+        padding-top: 0.4rem !important;
+    }
+
+    .tech-badge {
+        padding: 0.3rem 0.72rem !important;
+        background: rgba(255, 255, 255, 0.04) !important;
+        border: 1px solid rgba(255, 255, 255, 0.08) !important;
+        border-radius: 8px !important;
+        font-size: 0.76rem !important;
+        font-weight: 600 !important;
+        color: #cbd5e1 !important;
+        transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1) !important;
+    }
+
+    .tech-badge:hover {
+        background: rgba(56, 189, 248, 0.14) !important;
+        border-color: rgba(56, 189, 248, 0.45) !important;
+        color: #38bdf8 !important;
+        box-shadow: 0 0 12px rgba(56, 189, 248, 0.28) !important;
+        transform: translateY(-2px) !important;
+    }
+
+    /* Case Study Action Button */
+    .btn-card-action {
+        width: 100% !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: space-between !important;
+        padding: 0.75rem 1.15rem !important;
+        border-radius: 12px !important;
+        background: rgba(56, 189, 248, 0.06) !important;
+        border: 1px solid rgba(56, 189, 248, 0.22) !important;
+        color: #38bdf8 !important;
+        font-size: 0.88rem !important;
+        font-weight: 700 !important;
+        cursor: pointer !important;
+        transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1) !important;
+        margin-top: 0.35rem !important;
+    }
+
+    .btn-card-action i {
+        font-size: 0.85rem !important;
+        transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), color 0.3s ease !important;
+    }
+
+    .project-card:hover .btn-card-action,
+    .project-card.is-tilted .btn-card-action {
+        background: linear-gradient(135deg, rgba(56, 189, 248, 0.18) 0%, rgba(168, 85, 247, 0.18) 100%) !important;
+        border-color: rgba(56, 189, 248, 0.55) !important;
+        color: #ffffff !important;
+        box-shadow: 0 0 22px rgba(56, 189, 248, 0.32) !important;
+        transform: translateY(-2px) !important;
+    }
+
+    .project-card:hover .btn-card-action i,
+    .project-card.is-tilted .btn-card-action i {
+        transform: translateX(6px) !important;
+        color: #38bdf8 !important;
+    }
+}
