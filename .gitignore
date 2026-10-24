@@ -1,0 +1,8 @@
+# OS and local shortcut files
+*.lnk
+Thumbs.db
+.DS_Store
+
+# Temporary and log files
+*.log
+scratch/
