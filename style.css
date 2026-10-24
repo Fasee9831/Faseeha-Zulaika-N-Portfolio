@@ -41285,7 +41285,7 @@ body.light-theme .cmd-option:hover, body.light-theme .cmd-option.selected {
 
 
 
-.portfolio-chatbot-panel[hidden] { display: none; }
+.portfolio-chatbot-panel[hidden] { display: none !important; }
 
 
 
@@ -62326,13 +62326,19 @@ body.light-theme .cmd-option:hover, body.light-theme .cmd-option.selected {
         z-index: 10000 !important;
     }
 
-    .portfolio-chatbot-panel {
-        position: fixed !important;
-        bottom: 24px !important;
-        right: 28px !important;
+    .portfolio-chatbot-panel[hidden] {
+        display: none !important;
+    }
+
+    .portfolio-chatbot-panel:not([hidden]) {
+        position: absolute !important;
+        top: auto !important;
+        left: auto !important;
+        bottom: calc(100% + 14px) !important;
+        right: 0 !important;
         width: 410px !important;
         max-width: calc(100vw - 32px) !important;
-        height: min(650px, calc(100vh - 48px)) !important;
+        height: min(640px, calc(100vh - 100px)) !important;
         border-radius: 24px !important;
         background: linear-gradient(165deg, rgba(13, 18, 32, 0.96) 0%, rgba(7, 11, 20, 0.98) 100%) !important;
         backdrop-filter: blur(24px) saturate(180%) !important;

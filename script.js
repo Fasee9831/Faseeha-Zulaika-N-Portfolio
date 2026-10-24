@@ -3020,12 +3020,11 @@ function initPortfolioChatbot() {
     function openChat() {
         panel.hidden = false;
         launcher.setAttribute('aria-expanded', 'true');
-        chatbot.classList.add('chat-open');
-        document.body.classList.add('chat-open-locked');
         if (!messages.children.length) {
             addWelcomeMessage();
             renderStarterSuggestions();
         }
+        setTimeout(() => scrollToBottom(false), 80);
         if (window.innerWidth > 768 && !('ontouchstart' in window)) {
             setTimeout(() => input.focus(), 80);
         }
@@ -3034,8 +3033,6 @@ function initPortfolioChatbot() {
     function closeChat() {
         panel.hidden = true;
         launcher.setAttribute('aria-expanded', 'false');
-        chatbot.classList.remove('chat-open');
-        document.body.classList.remove('chat-open-locked');
         launcher.focus();
     }
 
