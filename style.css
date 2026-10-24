@@ -23306,6 +23306,18 @@ html.js .reveal-right.is-visible.settled {
 
 
 }
+.connect-social-card .connect-social-img {
+    width: 1.9rem;
+    height: 1.9rem;
+    border-radius: 6px;
+    object-fit: contain;
+    transition: transform var(--transition-smooth, 0.25s ease);
+}
+
+.connect-social-card:hover .connect-social-img {
+    transform: scale(1.12);
+}
+
 
 
 
@@ -61945,6 +61957,13 @@ body.light-theme .cmd-option:hover, body.light-theme .cmd-option.selected {
     .connect-social-card i {
         font-size: 0.95rem !important;
         color: #38bdf8 !important;
+    }
+    .connect-social-card .connect-social-img {
+        width: 1.05rem !important;
+        height: 1.05rem !important;
+        border-radius: 3px !important;
+        object-fit: contain !important;
+        flex-shrink: 0 !important;
     }
     .footer {
         padding: 2.25rem 0 3.5rem 0 !important;

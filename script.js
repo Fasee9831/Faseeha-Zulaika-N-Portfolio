@@ -3442,6 +3442,7 @@ function initPortfolioChatbot() {
 
         const text = question.toLowerCase();
 
+        if (text.includes('social') || text.includes('profile') || text.includes('naukri') || text.includes('product hunt') || text.includes('github') || text.includes('linkedin')) return { text: 'You can connect with Faseeha across her professional platforms:\n• LinkedIn: linkedin.com/in/faseeha-zulaika-n-32409425a\n• GitHub: github.com/Fasee9831\n• Product Hunt: https://www.producthunt.com/@faseeha_zulaika\n• Naukri: https://www.naukri.com/mnjuser/profile?id=&altresid', suggestions: ['Contact', 'Resume', 'Explore Projects'] };
         if (text.includes('recruiter')) return { text: 'Faseeha is an AI & Data Science graduate with hands-on experience across Generative AI, RAG, data analytics, machine learning, Python development, Power BI, and UI/UX.', suggestions: ['Skills', 'Projects', 'Experience', 'Resume', 'Contact'] };
 
         if (text.includes('who is') || text.includes('about faseeha')) return { text: "I'm Faseeha, an AI & Data Science graduate who enjoys building with data, AI, and code. I learn by experimenting and turning ideas into practical projects.", suggestions: initialQuestions.slice(1, 5) };
