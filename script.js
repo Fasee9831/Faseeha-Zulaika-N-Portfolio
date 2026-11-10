@@ -779,7 +779,7 @@ function initScrollReveals() {
         academicItems.forEach(el => academicObserver.observe(el));
     }
 
-    // Project card reveal (replays whenever reached)
+    // Project card reveal (smooth entrance once, stays settled)
     const projectRevealItems = document.querySelectorAll('.project-reveal');
     if (projectRevealItems.length) {
         if (!('IntersectionObserver' in window)) {
@@ -787,12 +787,12 @@ function initScrollReveals() {
         } else {
             const projectRevealObserver = new IntersectionObserver((entries) => {
                 entries.forEach(entry => {
-                    entry.target.classList.toggle('project-reveal-visible', entry.isIntersecting);
-                    if (isMobileDevice && entry.isIntersecting) {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('project-reveal-visible');
                         projectRevealObserver.unobserve(entry.target);
                     }
                 });
-            }, { threshold: 0.12 });
+            }, { threshold: 0.08 });
             projectRevealItems.forEach(el => projectRevealObserver.observe(el));
         }
     }
@@ -1738,6 +1738,10 @@ function initProjectSearchFilter() {
         const activeFilter = activeBtn ? slugify(activeBtn.getAttribute('data-filter')) : 'all';
 
         projectCards.forEach(card => {
+            // Clean up any in-flight 3D tilt before layout change
+            card.classList.remove('is-tilted');
+            card.style.transform = '';
+            card.style.transition = '';
 
             const title = card.querySelector('.project-card-title').textContent.toLowerCase();
 
@@ -1763,6 +1767,7 @@ function initProjectSearchFilter() {
 
             if (matchesSearch && matchesFilter) {
                 card.classList.remove('project-filtered-out');
+                card.classList.add('project-reveal-visible');
                 card.style.setProperty('display', 'flex', 'important');
                 card.style.removeProperty('opacity');
                 card.style.removeProperty('transform');
@@ -1771,6 +1776,16 @@ function initProjectSearchFilter() {
                 card.style.setProperty('display', 'none', 'important');
             }
 
+        });
+
+        // Re-synchronize Lenis and ScrollTrigger after DOM reflow so scroll limits never get stuck
+        requestAnimationFrame(() => {
+            if (lenisInstance) {
+                lenisInstance.resize();
+            }
+            if (window.ScrollTrigger) {
+                ScrollTrigger.refresh();
+            }
         });
 
     }
@@ -1817,6 +1832,17 @@ function initProjectSearchFilter() {
                 resetTilt();
             });
         });
+
+        // Reset tilt on scroll to avoid GPU compositing contention during page scroll
+        window.addEventListener('scroll', () => {
+            projectCards.forEach(card => {
+                if (card.classList.contains('is-tilted')) {
+                    card.classList.remove('is-tilted');
+                    card.style.transform = '';
+                    card.style.transition = '';
+                }
+            });
+        }, { passive: true });
     }
 
 }
@@ -1850,8 +1876,12 @@ function initCaseStudyModals() {
             targetModal.classList.add('active');
 
             document.body.style.overflow = 'hidden'; // Stop scrolling
+            document.documentElement.style.overflow = 'hidden';
 
             if (lenisInstance) lenisInstance.stop(); // Stop Lenis scroll
+
+            const scrollContainer = targetModal.querySelector('.scrollable-content') || targetModal;
+            if (scrollContainer) scrollContainer.scrollTop = 0;
 
             showToast(`Loaded Case Study: ${targetModal.querySelector('.modal-title').textContent}`, 'info');
 
@@ -1868,10 +1898,28 @@ function initCaseStudyModals() {
         allModals.forEach(modal => modal.classList.remove('active'));
 
         document.body.style.overflow = '';
+        document.documentElement.style.overflow = '';
 
-        if (lenisInstance) lenisInstance.start();
+        if (lenisInstance) {
+            lenisInstance.start();
+            lenisInstance.resize();
+        }
+
+        if (window.ScrollTrigger) {
+            ScrollTrigger.refresh();
+        }
 
     }
+
+    // Wheel event delegation: scrolling anywhere on the modal smoothly scrolls the case study
+    backdrop.addEventListener('wheel', (e) => {
+        const activeModal = backdrop.querySelector('.modal.active');
+        if (!activeModal) return;
+        const scrollable = activeModal.querySelector('.scrollable-content');
+        if (scrollable && e.target !== scrollable && !scrollable.contains(e.target)) {
+            scrollable.scrollTop += e.deltaY;
+        }
+    }, { passive: true });
 
     // Wire the "Read Case Study" buttons (data-modal attribute)
 
@@ -2142,6 +2190,7 @@ function initCaseStudyModals() {
         lbBackdrop.setAttribute('aria-hidden', 'false');
 
         document.body.style.overflow = 'hidden';
+        document.documentElement.style.overflow = 'hidden';
 
         if (lenisInstance) lenisInstance.stop();
 
@@ -2174,8 +2223,16 @@ function initCaseStudyModals() {
         if (!anyModalActive) {
 
             document.body.style.overflow = '';
+            document.documentElement.style.overflow = '';
 
-            if (lenisInstance) lenisInstance.start();
+            if (lenisInstance) {
+                lenisInstance.start();
+                lenisInstance.resize();
+            }
+
+            if (window.ScrollTrigger) {
+                ScrollTrigger.refresh();
+            }
 
         }
 

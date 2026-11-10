@@ -25078,6 +25078,7 @@ body.light-theme .cmd-option:hover, body.light-theme .cmd-option.selected {
 
 
     overflow: hidden;
+    overscroll-behavior: contain;
 
 
 
@@ -25486,6 +25487,8 @@ body.light-theme .cmd-option:hover, body.light-theme .cmd-option.selected {
 
 
     overflow-y: auto;
+    overscroll-behavior: contain;
+    -webkit-overflow-scrolling: touch;
 
 
 
