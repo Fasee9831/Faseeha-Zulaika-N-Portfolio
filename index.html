@@ -72,7 +72,7 @@
 
     <!-- Canonical & Alternate Link Tags -->
     <link rel="canonical" href="https://fasee9831.github.io/Faseeha-Zulaika-N-Portfolio/">
-    <link rel="image_src" href="https://fasee9831.github.io/Faseeha-Zulaika-N-Portfolio/portfolio-cover.jpg">
+    <link rel="image_src" href="https://fasee9831.github.io/Faseeha-Zulaika-N-Portfolio/Faseeha%20Zulaika%20N%20Portfolio%20Showcase.png">
 
     <!-- Open Graph / Facebook / LinkedIn / WhatsApp Rich Preview Meta Tags -->
     <meta property="og:type" content="website">
@@ -81,20 +81,13 @@
     <meta property="og:title" content="Faseeha Zulaika N | AI & Data Science Developer">
     <meta property="og:description" content="Explore interactive AI showcases, Power BI dashboards, computer vision projects, and conversational AI assistant by Faseeha Zulaika N.">
     
-    <!-- Primary Portfolio Showcase Cover Image -->
+    <!-- Portfolio Showcase Cover Image (LinkedIn / WhatsApp / Twitter Preview) -->
     <meta property="og:image" content="https://fasee9831.github.io/Faseeha-Zulaika-N-Portfolio/Faseeha%20Zulaika%20N%20Portfolio%20Showcase.png">
     <meta property="og:image:secure_url" content="https://fasee9831.github.io/Faseeha-Zulaika-N-Portfolio/Faseeha%20Zulaika%20N%20Portfolio%20Showcase.png">
     <meta property="og:image:type" content="image/png">
     <meta property="og:image:width" content="1672">
     <meta property="og:image:height" content="941">
-    <meta property="og:image:alt" content="Faseeha Zulaika N - Portfolio Showcase Preview Cover">
-
-    <!-- High-Compatibility Fallback for WhatsApp & LinkedIn (1200x630 Optimized) -->
-    <meta property="og:image" content="https://fasee9831.github.io/Faseeha-Zulaika-N-Portfolio/portfolio-cover.jpg">
-    <meta property="og:image:secure_url" content="https://fasee9831.github.io/Faseeha-Zulaika-N-Portfolio/portfolio-cover.jpg">
-    <meta property="og:image:type" content="image/jpeg">
-    <meta property="og:image:width" content="1200">
-    <meta property="og:image:height" content="630">
+    <meta property="og:image:alt" content="Faseeha Zulaika N - AI & Data Science Portfolio Showcase">
 
     <!-- Twitter / X Card Meta Tags (Large Preview Image Card) -->
     <meta name="twitter:card" content="summary_large_image">
@@ -1920,21 +1913,7 @@
 
 
 
-            /* 9. Floating Chatbot: Mobile Viewport Anchor */
-
-            .portfolio-chatbot-launcher {
-
-                bottom: 1.15rem !important;
-
-                right: 1.15rem !important;
-
-                width: 48px !important;
-
-                height: 48px !important;
-
-                z-index: 9999 !important;
-
-            }
+            /* 9. Floating Chatbot: Mobile Viewport Anchor (Consolidated in Mobile Section) */
 
         }
 
@@ -1966,118 +1945,154 @@
 
 
 
-        /* Chatbot Robot Mascot Styling (Desktop & Mobile) */
+        /* Chatbot Robot Mascot Styling (Desktop & Mobile) - Slightly Bigger for Laptop with Cute Assistant Tag */
 
         .portfolio-chatbot-launcher {
-
             position: relative !important;
-
             display: flex !important;
-
             align-items: center !important;
-
             justify-content: center !important;
-
-            width: 58px !important;
-
-            height: 58px !important;
-
-            border-radius: 50% !important;
-
-            background: radial-gradient(circle at 50% 50%, rgba(15, 23, 42, 0.95) 0%, rgba(8, 14, 26, 0.98) 100%) !important;
-
-            border: 1.5px solid rgba(56, 189, 248, 0.55) !important;
-
-            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.45), 0 0 20px rgba(56, 189, 248, 0.35) !important;
-
+            width: 82px !important;
+            height: 82px !important;
+            border-radius: 0 !important;
+            background: transparent !important;
+            border: none !important;
+            box-shadow: none !important;
             padding: 0 !important;
-
-            overflow: hidden !important;
-
+            overflow: visible !important;
             cursor: pointer !important;
-
             z-index: 9999 !important;
-
-            transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease !important;
-
+            filter: none !important;
+            transform: translateZ(0) !important;
+            will-change: transform !important;
+            backface-visibility: hidden !important;
+            animation: cuteRobotFloat 3.2s ease-in-out infinite !important;
+            transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1) !important;
         }
 
-        .portfolio-chatbot-launcher:hover {
-
-            transform: scale(1.08) translateY(-2px) !important;
-
-            border-color: rgba(56, 189, 248, 0.9) !important;
-
-            box-shadow: 0 12px 32px rgba(0, 0, 0, 0.55), 0 0 28px rgba(56, 189, 248, 0.5) !important;
-
+        @media (hover: hover) and (pointer: fine) {
+            .portfolio-chatbot-launcher:hover {
+                animation-play-state: paused !important;
+                transform: scale(1.12) translateY(-4px) translateZ(0) !important;
+                border: none !important;
+                box-shadow: none !important;
+                filter: none !important;
+            }
         }
 
         .portfolio-chatbot-launcher:active {
+            transform: scale(0.92) translateZ(0) !important;
+            border: none !important;
+            box-shadow: none !important;
+            filter: none !important;
+            transition: transform 0.12s ease !important;
+        }
 
-            transform: scale(0.96) !important;
+        @keyframes cuteRobotFloat {
+            0%, 100% {
+                transform: translateY(0) translateZ(0);
+            }
+            50% {
+                transform: translateY(-6px) translateZ(0);
+            }
+        }
 
+        /* Cute Assistant Pill Tag */
+        .chatbot-assistant-tag {
+            position: absolute !important;
+            top: -14px !important;
+            left: 50% !important;
+            transform: translateX(-50%) !important;
+            background: rgba(10, 16, 30, 0.94) !important;
+            backdrop-filter: blur(8px) !important;
+            -webkit-backdrop-filter: blur(8px) !important;
+            border: 1px solid rgba(56, 189, 248, 0.45) !important;
+            box-shadow: 0 4px 14px rgba(0, 0, 0, 0.5), 0 0 10px rgba(56, 189, 248, 0.2) !important;
+            color: #f1f5f9 !important;
+            font-size: 0.68rem !important;
+            font-weight: 700 !important;
+            letter-spacing: 0.06em !important;
+            text-transform: uppercase !important;
+            padding: 0.2rem 0.6rem !important;
+            border-radius: 20px !important;
+            white-space: nowrap !important;
+            pointer-events: none !important;
+            display: inline-flex !important;
+            align-items: center !important;
+            gap: 0.35rem !important;
+            z-index: 2 !important;
+            transition: all 0.25s ease !important;
+        }
+
+        .assistant-live-dot {
+            width: 6px !important;
+            height: 6px !important;
+            border-radius: 50% !important;
+            background: #38bdf8 !important;
+            box-shadow: 0 0 8px #38bdf8, 0 0 12px #38bdf8 !important;
+            display: inline-block !important;
+            animation: cuteDotPulse 1.8s ease-in-out infinite !important;
+        }
+
+        @keyframes cuteDotPulse {
+            0%, 100% {
+                transform: scale(1);
+                opacity: 0.85;
+            }
+            50% {
+                transform: scale(1.4);
+                opacity: 1;
+            }
+        }
+
+        @media (hover: hover) and (pointer: fine) {
+            .portfolio-chatbot-launcher:hover .chatbot-assistant-tag {
+                border-color: rgba(56, 189, 248, 0.85) !important;
+                box-shadow: 0 6px 18px rgba(0, 0, 0, 0.6), 0 0 16px rgba(56, 189, 248, 0.45) !important;
+                color: #38bdf8 !important;
+            }
         }
 
         .chatbot-robot-video {
-
             width: 100% !important;
-
             height: 100% !important;
-
-            object-fit: cover !important;
-
+            object-fit: contain !important;
             pointer-events: none !important;
-
             background: transparent !important;
-
             display: block !important;
+            border-radius: 0 !important;
+            transform: translateZ(0) !important;
+            will-change: transform !important;
+            backface-visibility: hidden !important;
+            contain: strict !important;
+        }
 
-            border-radius: 50% !important;
-
-            transform: scale(1.06) !important;
-
+        .chatbot-launcher-pulse {
+            display: none !important;
         }
 
         .chatbot-brand-mark.chatbot-robot-avatar {
-
             width: 42px !important;
-
             height: 42px !important;
-
             min-width: 42px !important;
-
-            border-radius: 50% !important;
-
-            overflow: hidden !important;
-
+            border-radius: 0 !important;
+            overflow: visible !important;
             padding: 0 !important;
-
             display: flex !important;
-
             align-items: center !important;
-
             justify-content: center !important;
-
-            background: rgba(15, 23, 42, 0.85) !important;
-
-            border: 1.5px solid rgba(56, 189, 248, 0.45) !important;
-
-            box-shadow: 0 0 12px rgba(56, 189, 248, 0.25) !important;
-
+            background: transparent !important;
+            border: none !important;
+            box-shadow: none !important;
         }
 
         .chatbot-header-robot {
-
             width: 100% !important;
-
             height: 100% !important;
-
-            object-fit: cover !important;
-
+            object-fit: contain !important;
             display: block !important;
-
-            transform: scale(1.06) !important;
-
+            border-radius: 0 !important;
+            transform: none !important;
         }
 
         @media (prefers-reduced-motion: reduce) {
@@ -2142,11 +2157,67 @@
         @media (max-width: 768px) {
             .portfolio-chatbot {
                 position: fixed !important;
-                bottom: max(1.15rem, env(safe-area-inset-bottom, 1.15rem)) !important;
-                right: max(1.15rem, env(safe-area-inset-right, 1.15rem)) !important;
+                bottom: max(1.1rem, env(safe-area-inset-bottom, 1.1rem)) !important;
+                right: max(1.1rem, env(safe-area-inset-right, 1.1rem)) !important;
                 z-index: 9999 !important;
                 display: block !important;
                 pointer-events: auto !important;
+            }
+            .portfolio-chatbot-launcher {
+                position: relative !important;
+                display: flex !important;
+                align-items: center !important;
+                justify-content: center !important;
+                width: 64px !important;
+                height: 64px !important;
+                min-width: 64px !important;
+                min-height: 64px !important;
+                background: transparent !important;
+                border: none !important;
+                border-radius: 0 !important;
+                box-shadow: none !important;
+                padding: 0 !important;
+                overflow: visible !important;
+                cursor: pointer !important;
+                z-index: 9999 !important;
+                filter: none !important;
+                transform: translateZ(0) !important;
+                will-change: transform !important;
+                contain: layout paint style !important;
+                animation: cuteRobotFloatMobile 3.2s ease-in-out infinite !important;
+                -webkit-tap-highlight-color: transparent !important;
+                touch-action: manipulation !important;
+            }
+            .portfolio-chatbot-launcher:active {
+                transform: scale(0.92) translateZ(0) !important;
+                transition: transform 0.12s cubic-bezier(0.34, 1.56, 0.64, 1) !important;
+            }
+            /* Cute Assistant Tag for Mobile */
+            .chatbot-assistant-tag {
+                top: -13px !important;
+                font-size: 0.58rem !important;
+                font-weight: 700 !important;
+                letter-spacing: 0.05em !important;
+                padding: 0.12rem 0.48rem !important;
+                border-radius: 12px !important;
+                border: 1px solid rgba(56, 189, 248, 0.45) !important;
+                box-shadow: 0 4px 12px rgba(0, 0, 0, 0.55), 0 0 8px rgba(56, 189, 248, 0.25) !important;
+                background: rgba(10, 16, 30, 0.94) !important;
+                backdrop-filter: blur(8px) !important;
+                -webkit-backdrop-filter: blur(8px) !important;
+                transition: opacity 0.2s ease, transform 0.2s ease !important;
+            }
+            .assistant-live-dot {
+                width: 5px !important;
+                height: 5px !important;
+                background: #38bdf8 !important;
+                box-shadow: 0 0 6px #38bdf8, 0 0 10px #38bdf8 !important;
+            }
+            /* When chat panel is open on mobile, smoothly fade the floating tag to keep the UI clean */
+            .portfolio-chatbot-launcher[aria-expanded="true"] .chatbot-assistant-tag {
+                opacity: 0 !important;
+                pointer-events: none !important;
+                transform: translateX(-50%) translateY(4px) scale(0.85) !important;
             }
             .portfolio-chatbot-panel[hidden] {
                 display: none !important;
@@ -2429,6 +2500,59 @@
                 opacity: 0.35 !important;
                 cursor: not-allowed !important;
                 box-shadow: none !important;
+            }
+        }
+
+        /* Mobile mascot gentle float animation */
+        @keyframes cuteRobotFloatMobile {
+            0%, 100% {
+                transform: translateY(0) translateZ(0);
+            }
+            50% {
+                transform: translateY(-4px) translateZ(0);
+            }
+        }
+
+        /* Compact & Narrow Mobile Phones (≤ 400px) */
+        @media (max-width: 400px) {
+            .portfolio-chatbot {
+                bottom: max(0.9rem, env(safe-area-inset-bottom, 0.9rem)) !important;
+                right: max(0.9rem, env(safe-area-inset-right, 0.9rem)) !important;
+            }
+            .portfolio-chatbot-launcher {
+                width: 58px !important;
+                height: 58px !important;
+                min-width: 58px !important;
+                min-height: 58px !important;
+            }
+            .chatbot-assistant-tag {
+                top: -12px !important;
+                font-size: 0.52rem !important;
+                padding: 0.1rem 0.44rem !important;
+            }
+            .portfolio-chatbot-panel:not([hidden]),
+            .portfolio-chatbot-panel.active {
+                width: calc(100vw - 1.8rem) !important;
+                right: -0.2rem !important;
+            }
+        }
+
+        /* Ultra-compact Mobile Phones (≤ 340px) */
+        @media (max-width: 340px) {
+            .portfolio-chatbot {
+                bottom: max(0.75rem, env(safe-area-inset-bottom, 0.75rem)) !important;
+                right: max(0.75rem, env(safe-area-inset-right, 0.75rem)) !important;
+            }
+            .portfolio-chatbot-launcher {
+                width: 52px !important;
+                height: 52px !important;
+                min-width: 52px !important;
+                min-height: 52px !important;
+            }
+            .chatbot-assistant-tag {
+                top: -10px !important;
+                font-size: 0.48rem !important;
+                padding: 0.08rem 0.38rem !important;
             }
         }
 
@@ -11009,15 +11133,10 @@
 
 
         <button class="portfolio-chatbot-launcher" id="portfolio-chatbot-launcher" type="button" aria-label="Open Faseeha's Portfolio Assistant" aria-expanded="false">
-
+            <span class="chatbot-assistant-tag"><span class="assistant-live-dot"></span>Assistant</span>
             <video class="chatbot-robot-video" autoplay loop muted playsinline poster="chatbot-poster.png" aria-label="Animated Robot Assistant Mascot">
-
                 <source src="chatbot-transparent.webm" type="video/webm">
-
             </video>
-
-            <span class="chatbot-launcher-pulse" aria-hidden="true"></span>
-
         </button>
 
 
